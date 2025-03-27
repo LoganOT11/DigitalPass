@@ -1,3 +1,4 @@
+// In generatePass.js
 const fs = require('fs');
 const path = require('path');
 const JSZip = require('jszip');
@@ -21,7 +22,7 @@ const generateManifest = (files) => {
 };
 
 // Function to create the .pkpass file
-const generatePkPass = async () => {
+const generatePass = async () => {
   const zip = new JSZip();
 
   // Add pass.json (the template you already created)
@@ -53,5 +54,5 @@ const generatePkPass = async () => {
   console.log(`Pass generated successfully: ${distPath}`);
 };
 
-// Run the pass generation function
-generatePkPass();
+// Export the function
+module.exports = generatePass;
