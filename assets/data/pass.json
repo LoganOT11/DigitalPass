@@ -1,0 +1,38 @@
+{
+    "formatVersion": 1,
+    "passTypeIdentifier": "pass.com.yourclub.membership",
+    "serialNumber": "12345",
+    "teamIdentifier": "YOUR_TEAM_ID",  
+    "organizationName": "Your Club",
+    "description": "Membership Card",
+    "logoText": "Your Club Member",
+    "backgroundColor": "rgb(255,255,255)",
+    "foregroundColor": "rgb(0,0,0)",
+    "labelColor": "rgb(255,255,255)",
+    "barcode": {
+      "message": "12345",
+      "format": "PKBarcodeFormatQR",
+      "messageEncoding": "iso-8859-1"
+    },
+    "storeCard": {
+      "primaryFields": [
+        {
+          "key": "name",
+          "label": "Member Name",
+          "value": "John Doe"
+        },
+        {
+          "key": "membershipId",
+          "label": "Membership ID",
+          "value": "12345"
+        }
+      ],
+      "secondaryFields": [
+        {
+          "key": "expiration",
+          "label": "Expires On",
+          "value": "2025-12-31"
+        }
+      ]
+    }
+  }
