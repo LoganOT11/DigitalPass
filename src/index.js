@@ -7,7 +7,7 @@ const crypto = require('crypto');
 const logoPath = path.join(__dirname, '..', 'assets', 'images', 'logo.png');
 const iconPath = path.join(__dirname, '..', 'assets', 'images', 'icon.png');
 const backgroundPath = path.join(__dirname, '..', 'assets', 'images', 'background.png');
-const passJsonPath = path.join(__dirname, '..', 'assets', 'data', 'sample-pass.json');
+const passJsonPath = path.join(__dirname, '..', 'assets', 'data', 'pass.json');
 
 // Function to generate the manifest
 const generateManifest = (files) => {
@@ -34,7 +34,13 @@ const generatePkPass = async () => {
   zip.file('background.png', fs.readFileSync(backgroundPath));
 
   // Generate manifest for all files
-  const manifest = generateManifest(['pass.json', 'logo.png', 'icon.png', 'background.png']);
+  const manifest = generateManifest([
+    'assets/data/pass.json',
+    'assets/images/logo.png',
+    'assets/images/icon.png',
+    'assets/images/background.png'
+  ]);
+  
   zip.file('manifest.json', JSON.stringify(manifest));
 
   // Create the final .pkpass file
