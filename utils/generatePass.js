@@ -1,35 +1,31 @@
-// In generatePass.js
-const fs = require('fs');
-const path = require('path');
-const JSZip = require('jszip');
-const crypto = require('crypto');
-
-// Path to your assets (images and data)
-const logoPath = path.join(__dirname, '..', 'assets', 'images', 'logo.png');
-const iconPath = path.join(__dirname, '..', 'assets', 'images', 'icon.png');
-const backgroundPath = path.join(__dirname, '..', 'assets', 'images', 'background.png');
-const passJsonPath = path.join(__dirname, '..', 'assets', 'data', 'pass.json');
-
-// Function to generate the manifest
-const generateManifest = (files) => {
-  const manifest = {};
-  files.forEach(file => {
-    const filePath = path.join(__dirname, '..', file);
-    const hash = crypto.createHash('sha1').update(fs.readFileSync(filePath)).digest('hex');
-    manifest[file] = hash;
-  });
-  return manifest;
-};
-
-// Function to create the .pkpass file
-const generatePass = async () => {
+const generatePass = async (data) => {
   const zip = new JSZip();
 
-  // Add pass.json (the template you already created)
-  const passJson = JSON.parse(fs.readFileSync(passJsonPath));
+  // Create a new pass.json with dynamic data from `data`
+  const passJson = {
+    formatVersion: 1,
+    passTypeIdentifier: 'pass.com.yourcompany.membercard',
+    serialNumber: data.membershipId,
+    teamIdentifier: 'your-team-id',
+    organizationName: 'Your Organization',
+    description: 'Membership Card',
+    logoText: 'Membership',
+    foregroundColor: 'rgb(0, 0, 0)',
+    backgroundColor: 'rgb(255, 255, 255)',
+    labelColor: 'rgb(0, 0, 0)',
+    barcode: {
+      format: 'PKBarcodeFormatQR',
+      message: data.membershipId,
+      messageEncoding: 'iso-8859-1'
+    },
+    expirationDate: data.expiration,  // Use data from request
+    relevantDate: data.relevantDate,  // Use data from request if needed
+  };
+
+  // Add dynamic pass.json to the zip file
   zip.file('pass.json', JSON.stringify(passJson));
 
-  // Add image files (logo, icon, background)
+  // Add the images
   zip.file('logo.png', fs.readFileSync(logoPath));
   zip.file('icon.png', fs.readFileSync(iconPath));
   zip.file('background.png', fs.readFileSync(backgroundPath));
@@ -39,9 +35,8 @@ const generatePass = async () => {
     'assets/data/pass.json',
     'assets/images/logo.png',
     'assets/images/icon.png',
-    'assets/images/background.png'
+    'assets/images/background.png',
   ]);
-  
   zip.file('manifest.json', JSON.stringify(manifest));
 
   // Create the final .pkpass file
@@ -53,6 +48,3 @@ const generatePass = async () => {
 
   console.log(`Pass generated successfully: ${distPath}`);
 };
-
-// Export the function
-module.exports = generatePass;
