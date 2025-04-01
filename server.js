@@ -1,21 +1,15 @@
 const express = require('express');
-const path = require('path');
-const generatePass = require('./utils/generatePass'); // Assuming your pass generation function is here
+const bodyParser = require('body-parser');
+const passRoutes = require('./routes/passRoutes'); // Import the passRoutes
 
 const app = express();
 const port = 3000;
 
-// Define route to generate pass
-app.get('/api/pass/generate', async (req, res) => {
-  try {
-    // Call the function to generate the pass
-    await generatePass();
-    res.send('Pass generated successfully!');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error generating pass');
-  }
-});
+// Middleware to parse JSON bodies
+app.use(bodyParser.json());
+
+// Use the routes
+app.use('/api/pass', passRoutes); // Prefix the routes with /api/pass
 
 // Start the server
 app.listen(port, () => {
